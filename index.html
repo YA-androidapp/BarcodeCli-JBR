@@ -29,6 +29,7 @@
             <video id="video"></video>
             <img id="image" />
         </div>
+        <p id="Result"></p>
     </div>
     <script type="text/javascript" src="javascript-barcode-reader.js"></script>
     <script>
@@ -83,7 +84,8 @@
                     vEle.srcObject = stream;
                     vEle.play();
                 }, function () {
-                    console.log('err: ' + arguments);
+                    var result = document.getElementById('Result');
+                    Result.innerHTML += "<br />\n<br />\n" + 'err: ' + arguments;
                 })
             }
 
@@ -91,6 +93,7 @@
                 var cEle = document.createElement('canvas');
                 var vEle = document.getElementById('video');
                 var iEle = document.getElementById('image');
+                var result = document.getElementById('Result');
 
                 var cCtx = cEle.getContext('2d');
 
@@ -105,16 +108,15 @@
                 cCtx.drawImage(vEle, 0, 0, width, height);
                 iEle.src = cEle.toDataURL();
 
-                console.log(cEle.toDataURL());
+                Result.innerHTML += "<br />\n<br />\n" + cEle.toDataURL();
 
                 javascriptBarcodeReader(iEle, {
                     barcode: 'ean-13',
                     type: '',
                 }).then(code => {
-                    console.log('Code: ' + code);
-                    alert('Code: ' + code);
+                    Result.innerHTML += "<br />\n<br />\n" + 'Code: ' + code;
                 }).catch(err => {
-                    console.log(err + "\n" + err.stack);
+                    Result.innerHTML += "<br />\n<br />\n" + err + "\n" + err.stack;
                 })
             }
 
